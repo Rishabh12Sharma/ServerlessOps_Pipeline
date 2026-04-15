@@ -2,8 +2,8 @@ terraform {
   required_version = ">= 1.5.0"
 
   backend "s3" {
-    bucket         = "serverlessops-pipeline-platform-tf-state"
-    key            = "global/devops-accelerator/terraform.tfstate"
+    bucket         = "serverlessops-pipeline-tf-state-12345"
+    key            = "global/serverlessops-pipeline/terraform.tfstate"
     region         = "us-east-1"
     dynamodb_table = "serverlessops-pipeline-tf-locker"
     encrypt        = true
@@ -15,7 +15,7 @@ provider "aws" {
 }
 
 resource "aws_iam_role" "lambda_exec_role" {
-  name = "lambda_exec_role"
+  name = "ServerlessOpsPipeline-Lambda-Exec-Role"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17",
@@ -47,7 +47,7 @@ resource "aws_s3_bucket" "upload_bucket" {
 }
 
 resource "aws_lambda_function" "process_uploaded_file" {
-  function_name = "process-uploaded-file"
+  function_name = "serverlessops-pipeline-process-upload"
   runtime       = "python3.11"
   handler       = "main.lambda_handler"
   filename      = "${path.module}/../../backend/lambda/process-uploaded-file/lambda.zip"
@@ -57,7 +57,7 @@ resource "aws_lambda_function" "process_uploaded_file" {
   environment {
     variables = {
       UPLOAD_BUCKET = aws_s3_bucket.upload_bucket.bucket
-      SNS_TOPIC_ARN = aws_sns_topic.devops_accelerator_upload_notify.arn
+      SNS_TOPIC_ARN = aws_sns_topic.serverlessops_pipeline_upload_notify.arn
     }
   }
 }
@@ -183,14 +183,14 @@ resource "aws_cloudfront_distribution" "frontend_distribution" {
   }
 
   tags = {
-    Name = "FrontendCDN"
+    Name = "serverlessops-pipeline-frontend-cdn"
   }
 
   depends_on = [aws_s3_bucket_policy.frontend_bucket_policy]
 }
 
 resource "aws_iam_role" "presign_lambda_role" {
-  name = "DevOps-Accelerator-Presign-Lambda-Role"
+  name = "ServerlessOpsPipeline-Presign-Lambda-Role"
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
     Statement = [{
@@ -204,7 +204,7 @@ resource "aws_iam_role" "presign_lambda_role" {
 }
 
 resource "aws_iam_policy" "presign_lambda_policy" {
-  name = "DevOps-Accelerator-Presign-Lambda-Policy"
+  name = "ServerlessOpsPipeline-Presign-Lambda-Policy"
   policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
@@ -235,7 +235,7 @@ resource "aws_iam_role_policy_attachment" "presign_lambda_attach" {
 }
 
 resource "aws_lambda_function" "presign_lambda" {
-  function_name = "DevOps-Accelerator-Presign-Handler"
+  function_name = "serverlessops-pipeline-presign-handler"
   role          = aws_iam_role.presign_lambda_role.arn
   handler       = "main.lambda_handler"
   runtime       = "python3.12"
@@ -250,7 +250,7 @@ resource "aws_lambda_function" "presign_lambda" {
 }
 
 resource "aws_apigatewayv2_api" "presign_api" {
-  name          = "DevOps-Accelerator-Presign-API"
+  name          = "ServerlessOpsPipeline-Presign-API"
   protocol_type = "HTTP"
 
   cors_configuration {
@@ -275,7 +275,7 @@ resource "aws_apigatewayv2_route" "presign_route" {
 }
 
 resource "aws_cloudwatch_log_group" "apigw_logs" {
-  name              = "/aws/apigateway/presign-api"
+  name              = "/aws/apigateway/serverlessops-pipeline-presign-api"
   retention_in_days = 7
 }
 
@@ -308,18 +308,18 @@ resource "aws_lambda_permission" "allow_apigw_invoke_presign" {
   source_arn    = "${aws_apigatewayv2_api.presign_api.execution_arn}/*/*"
 }
 
-resource "aws_sns_topic" "devops_accelerator_upload_notify" {
-  name = "devops-accelerator-upload-notification-topic"
+resource "aws_sns_topic" "serverlessops_pipeline_upload_notify" {
+  name = "serverlessops-pipeline-upload-notification-topic"
 }
 
-resource "aws_sns_topic_subscription" "devops_accelerator_email_sub" {
-  topic_arn = aws_sns_topic.devops_accelerator_upload_notify.arn
+resource "aws_sns_topic_subscription" "serverlessops_pipeline_email_sub" {
+  topic_arn = aws_sns_topic.serverlessops_pipeline_upload_notify.arn
   protocol  = "email"
   endpoint  = var.notification_email
 }
 
-resource "aws_iam_policy" "devops_accelerator_lambda_sns_policy" {
-  name = "devops-accelerator-lambda-sns-publish-policy"
+resource "aws_iam_policy" "serverlessops_pipeline_lambda_sns_policy" {
+  name = "serverlessops-pipeline-lambda-sns-policy"
 
   policy = jsonencode({
     Version = "2012-10-17",
@@ -327,7 +327,7 @@ resource "aws_iam_policy" "devops_accelerator_lambda_sns_policy" {
       {
         Effect   = "Allow",
         Action   = "sns:Publish",
-        Resource = aws_sns_topic.devops_accelerator_upload_notify.arn
+        Resource = aws_sns_topic.serverlessops_pipeline_upload_notify.arn
       }
     ]
   })
@@ -335,5 +335,5 @@ resource "aws_iam_policy" "devops_accelerator_lambda_sns_policy" {
 
 resource "aws_iam_role_policy_attachment" "lambda_sns_policy_attachment" {
   role       = aws_iam_role.lambda_exec_role.name
-  policy_arn = aws_iam_policy.devops_accelerator_lambda_sns_policy.arn
+  policy_arn = aws_iam_policy.serverlessops_pipeline_lambda_sns_policy.arn
 }
