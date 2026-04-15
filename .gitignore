@@ -4,7 +4,9 @@
 .terraform/                      # Terraform cache directory
 *.tfstate                        # Local state files
 *.tfstate.backup                 # State backup files
-*.tfstate.*                      # State lock or variations
+*.tfstate.*   
+# Terraform variables (sensitive)
+terraform.tfvars                   # State lock or variations
 
 # Lock file: keep this unless you're managing multiple provider versions manually
 # If working in teams or CI/CD, commit it for consistency
