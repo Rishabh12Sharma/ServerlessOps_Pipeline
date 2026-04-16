@@ -197,15 +197,48 @@ If you'd like to replicate this project [DevOps Accelerator] on your own AWS acc
 
 ---
 
-<img width="1918" height="972" alt="Screenshot 2026-04-15 110055" src="https://github.com/user-attachments/assets/25b0af9c-d343-4606-9c81-6cdd5c287cb8" />
+## 🖥️ Frontend UI
 <img width="1918" height="967" alt="Screenshot 2026-04-15 110152" src="https://github.com/user-attachments/assets/cf779c90-ff86-4863-abd0-f9d40b2eb08a" />
+
+<br>
+
 <img width="1918" height="967" alt="Screenshot 2026-04-15 110228" src="https://github.com/user-attachments/assets/70a4afad-c557-4b01-b388-c71027103512" />
+
+<br>
+
 <img width="1918" height="972" alt="Screenshot 2026-04-15 110302" src="https://github.com/user-attachments/assets/f9af912d-3af6-48cc-a3c2-52bdcf95aa06" />
+
+<br>
+
+## 🪣 S3 Buckets
 <img width="1918" height="967" alt="Screenshot 2026-04-15 113130" src="https://github.com/user-attachments/assets/27917dba-fb19-4bfe-8e1a-549fe633f105" />
+
+<br>
+
+## 📊 CloudWatch Logs
 <img width="1918" height="962" alt="Screenshot 2026-04-15 113533" src="https://github.com/user-attachments/assets/0dbee1f5-85a6-4e55-abe0-4ab9eceb64ba" />
-<img width="1461" height="497" alt="Screenshot 2026-04-15 114312" src="https://github.com/user-attachments/assets/07b53035-6030-42d4-82fc-716c39695224" />
+
+<br>
+
 <img width="1918" height="967" alt="Screenshot 2026-04-15 114647" src="https://github.com/user-attachments/assets/528b3b17-2662-4d2c-8ceb-aa3787f9f0dd" />
+
+<br>
+
 <img width="1918" height="972" alt="Screenshot 2026-04-15 114906" src="https://github.com/user-attachments/assets/a0b614f5-78c3-4e18-a86d-cf55f253a3b9" />
+
+<br>
+
+## 📣 SNS Email
+<img width="1461" height="497" alt="Screenshot 2026-04-15 114312" src="https://github.com/user-attachments/assets/07b53035-6030-42d4-82fc-716c39695224" />
+
+<br>
+
+## 🔁 GitHub Actions (CI/CD)
+<img width="1918" height="872" alt="image" src="https://github.com/user-attachments/assets/b4d57703-e746-42e0-a128-7d1ce64af65f" />
+
+<br>
+
+
 
 
 🔥 Happy DevOps-ing!
